@@ -1,0 +1,42 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "hmsEnterprise",
+    "buildTool": "maven",
+    "cacheProvider": "redis",
+    "clientFramework": "angular",
+    "devDatabaseType": "mysql",
+    "enableHibernateCache": true,
+    "enableSwaggerCodegen": true,
+    "entities": [
+      "Tenant",
+      "Property",
+      "Role",
+      "StaffProfile",
+      "Guest",
+      "IdentityDocument",
+      "RoomType",
+      "Room",
+      "RatePlan",
+      "Reservation",
+      "ReservationLine",
+      "Folio",
+      "FolioItem",
+      "Payment",
+      "AuditLog",
+      "EventStream",
+      "Notification",
+      "DataLakeExport"
+    ],
+    "jhipsterVersion": "8.11.0",
+    "jwtSecretKey": "MTVjMTExNzU4M2MzNDI0MzkwNzkxMDEwNmYzZTY5MzI0ZWUzNmJmYzE0MzJlNzA1NjNiOWM2N2JlMDU3NTkzYWZiMzZlMzI1NTljMzcxODg5ODE2YTYzNmMyMzY1YjE4MjBkZjM5MTNhYzhmMDA4ZjJmODY5ZWMxNTAxZjhkNzI=",
+    "languages": ["en"],
+    "lastLiquibaseTimestamp": 1760256884000,
+    "messageBroker": "kafka",
+    "nativeLanguage": "en",
+    "packageName": "com.example.hms",
+    "prodDatabaseType": "mysql",
+    "serviceDiscoveryType": "no"
+  }
+}

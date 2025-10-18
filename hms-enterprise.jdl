@@ -1,0 +1,315 @@
+/**
+ * HMS Enterprise — Full JDL (MySQL-ready, AngularPro blueprint compatible)
+ *
+ * Usage:
+ *   1. Save as hms-enterprise-clean.jdl
+ *   2. Run: jhipster import-jdl hms-enterprise-clean.jdl --blueprints angularpro
+ */
+
+application {
+  config {
+    baseName hmsEnterprise
+    applicationType monolith
+    authenticationType jwt
+    buildTool maven
+    enableSwaggerCodegen true
+    packageName com.example.hms
+    prodDatabaseType mysql
+    devDatabaseType mysql
+    cacheProvider redis
+    enableHibernateCache true
+    messageBroker kafka
+    clientFramework angular
+    serviceDiscoveryType no
+    languages [en]
+  }
+  entities *
+}
+
+/* ==================== BASE ENTITIES ==================== */
+entity Tenant {
+  name String required unique,
+  contactEmail String,
+  contactPhone String,
+  address String,
+  active Boolean required,
+  createdBy String,
+  createdDate Instant,
+  modifiedBy String,
+  modifiedDate Instant,
+  deleted Boolean
+}
+
+entity Property {
+  name String required,
+  address String required,
+  city String required,
+  state String,
+  country String,
+  contactNumber String,
+  email String,
+  timezone String,
+  currency String,
+  active Boolean required,
+  createdBy String,
+  createdDate Instant,
+  modifiedBy String,
+  modifiedDate Instant,
+  deleted Boolean
+}
+
+/* ==================== ROLES & USERS ==================== */
+entity Role {
+  name String required unique,
+  description String
+}
+
+/* Built-in User will be used */
+entity StaffProfile {
+  firstName String required,
+  lastName String,
+  designation String,
+  department String,
+  joinDate LocalDate,
+  salary BigDecimal,
+  profileImageUrl String,
+  idProofType String,
+  idProofNumber String,
+  emergencyContact String,
+  address String,
+  createdBy String,
+  createdDate Instant,
+  modifiedBy String,
+  modifiedDate Instant,
+  deleted Boolean
+}
+
+/* ==================== GUEST MANAGEMENT ==================== */
+entity Guest {
+  firstName String required,
+  lastName String,
+  email String required,
+  phone String,
+  address String,
+  dateOfBirth LocalDate,
+  preferredLanguage String,
+  loyaltyAccountRef String,
+  createdBy String,
+  createdDate Instant,
+  modifiedBy String,
+  modifiedDate Instant,
+  deleted Boolean
+}
+
+entity IdentityDocument {
+  ownerType String required,   // GUEST / STAFF
+  ownerId Long required,
+  documentType String required,
+  documentNumber String required,
+  issuingCountry String,
+  issueDate LocalDate,
+  expiryDate LocalDate,
+  documentUrl String,
+  verified Boolean,
+  verifiedBy Long,
+  verifiedAt Instant,
+  createdBy String,
+  createdDate Instant,
+  modifiedBy String,
+  modifiedDate Instant,
+  deleted Boolean
+}
+
+/* ==================== ROOMS & RATE PLANS ==================== */
+entity RoomType {
+  code String required,
+  name String required,
+  description String,
+  capacity Integer required,
+  amenities String,
+  basePrice BigDecimal required,
+  createdBy String,
+  createdDate Instant,
+  modifiedBy String,
+  modifiedDate Instant,
+  deleted Boolean
+}
+
+entity Room {
+  roomNumber String required,
+  floor Integer,
+  wing String,
+  status String required,
+  housekeepingStatus String,
+  currentPrice BigDecimal,
+  createdBy String,
+  createdDate Instant,
+  modifiedBy String,
+  modifiedDate Instant,
+  deleted Boolean
+}
+
+entity RatePlan {
+  code String required,
+  name String required,
+  description String,
+  rateType String required,
+  price BigDecimal required,
+  currency String,
+  validFrom LocalDate,
+  validTo LocalDate,
+  regulations String,
+  createdBy String,
+  createdDate Instant,
+  modifiedBy String,
+  modifiedDate Instant,
+  deleted Boolean
+}
+
+/* ==================== RESERVATIONS & PAYMENTS ==================== */
+entity Reservation {
+  reservationCode String required unique,
+  checkInDate LocalDate required,
+  checkOutDate LocalDate required,
+  adults Integer,
+  children Integer,
+  numberOfRooms Integer,
+  totalAmount BigDecimal required,
+  currency String,
+  status String required,
+  paymentStatus String,
+  createdBy String,
+  createdDate Instant,
+  modifiedBy String,
+  modifiedDate Instant,
+  cancelledAt Instant,
+  cancellationReason String,
+  deleted Boolean
+}
+
+entity ReservationLine {
+  nights Integer required,
+  pricePerNight BigDecimal required,
+  taxes BigDecimal,
+  totalLineAmount BigDecimal,
+  createdBy String,
+  createdDate Instant,
+  modifiedBy String,
+  modifiedDate Instant,
+  deleted Boolean
+}
+
+entity Folio {
+  folioNumber String required unique,
+  totalAmount BigDecimal,
+  currency String,
+  status String,
+  createdBy String,
+  createdDate Instant,
+  modifiedBy String,
+  modifiedDate Instant,
+  deleted Boolean
+}
+
+entity FolioItem {
+  type String,
+  description String,
+  amount BigDecimal,
+  quantity Integer,
+  tax BigDecimal,
+  postedBy Long,
+  postedAt Instant,
+  sourceReference String,
+  refundable Boolean,
+  createdBy String,
+  createdDate Instant,
+  modifiedBy String,
+  modifiedDate Instant,
+  deleted Boolean
+}
+
+entity Payment {
+  paymentDate Instant required,
+  amount BigDecimal required,
+  currency String,
+  method String required,
+  status String required,
+  transactionRef String,
+  gatewayResponse String,
+  createdBy String,
+  createdDate Instant,
+  modifiedBy String,
+  modifiedDate Instant,
+  deleted Boolean
+}
+
+/* ==================== SUPPORTING ENTITIES ==================== */
+entity AuditLog {
+  actionType String required,
+  entityName String required,
+  entityId Long required,
+  changeSummary String,
+  createdAt Instant required,
+  createdBy String,
+  deleted Boolean
+}
+
+entity EventStream {
+  eventType String required,
+  entityName String required,
+  entityId Long required,
+  payload String required,
+  sourceSystem String,
+  processed Boolean,
+  createdAt Instant required
+}
+
+entity Notification {
+  message String required,
+  type String,
+  read Boolean,
+  createdAt Instant,
+  createdBy String,
+  deleted Boolean
+}
+
+entity DataLakeExport {
+  entityNames String required,
+  exportPath String required,
+  status String,
+  startedAt Instant,
+  finishedAt Instant,
+  details String,
+  createdBy String,
+  createdDate Instant,
+  deleted Boolean
+}
+
+/* ==================== RELATIONSHIPS ==================== */
+relationship OneToMany {
+  Tenant{property} to Property,
+  Property{roomType} to RoomType,
+  Property{room} to Room,
+  Property{ratePlan} to RatePlan,
+  Property{staff} to StaffProfile,
+  Property{reservation} to Reservation,
+  Reservation{reservationLine} to ReservationLine,
+  Folio{folioItem} to FolioItem
+}
+
+relationship ManyToOne {
+  StaffProfile{user} to User with builtInEntity,
+  Guest{property} to Property,
+  IdentityDocument{guest} to Guest,
+  Room{roomType} to RoomType,
+  ReservationLine{room} to Room,
+  ReservationLine{ratePlan} to RatePlan,
+  Payment{folio} to Folio,
+  Payment{reservation} to Reservation,
+  AuditLog{user} to User with builtInEntity
+}
+
+/* ==================== DTOs, SERVICES & PAGINATION ==================== */
+dto * with mapstruct
+service * with serviceClass
+paginate * with pagination
